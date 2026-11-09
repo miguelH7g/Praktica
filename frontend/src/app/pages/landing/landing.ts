@@ -5,6 +5,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth';
 import { ChangeDetectorRef } from '@angular/core';
+import { API_URL } from '../../config/api.config';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class LandingComponent implements OnInit {
   mensajeEnviado = false;
   errorEnvio = false;
 
-  private apiUrl = 'http://localhost:8080/api/contacto';
+  private apiUrl = `${API_URL}/api/contacto`;
 
   constructor(
     private authService: AuthService,

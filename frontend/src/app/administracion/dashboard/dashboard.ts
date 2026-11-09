@@ -8,6 +8,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { BaseChartDirective, NgChartsModule } from 'ng2-charts';
+import { API_URL } from '../../config/api.config';
+import { ADMIN_MENU_ITEMS } from '../menu.config';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,8 +34,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   nueva = '';
   confirmar = '';
   confirmarAccion = false;
-  private apiUrl_logout = 'http://localhost:8080/api/usuarios';
-  private apiUrl_pagos = 'http://localhost:8080/api/pagos';
+  private apiUrl_logout = `${API_URL}/api/usuarios`;
+  private apiUrl_pagos = `${API_URL}/api/pagos`;
 
   public productChartData: ChartConfiguration<'bar'>['data'] = {
     labels: [],
@@ -69,13 +71,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   };
 
-  menuItems = [
-    { name: 'Panel', icon: 'bi bi-grid', route: '/panel' },
-    { name: 'Empleados', icon: 'bi bi-pencil-square', route: '/empleados' },
-    { name: 'Chat', icon: 'bi bi-chat-dots', route: '/chat-atencion' },
-    //{ name: 'Pagos', icon: 'bi bi-currency-dollar', route: '/pagos' },
-    { name: 'Dashboard', icon: 'bi bi-bar-chart', route: '/dashboard' }
-  ];
+  menuItems = [...ADMIN_MENU_ITEMS];
 
   @Output() cambioExitoso = new EventEmitter<void>();
 
@@ -91,7 +87,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.intervaloKeepAlive = setInterval(() => {
       const ahora = Date.now();
       if (ahora - this.ultimoPing < 60000) {
-        this.http.put('http://localhost:8080/api/usuarios/keep-alive', {}, { headers: { 'Authorization': `Bearer ${this.usuario.token}` } }).subscribe();
+        this.http.put(`${API_URL}/api/usuarios/keep-alive`, {}, { headers: { 'Authorization': `Bearer ${this.usuario.token}` } }).subscribe();
       }
     }, 30000);
   }
@@ -160,7 +156,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    this.http.put('http://localhost:8080/api/usuarios/cambiar-contrasena', {
+    this.http.put(`${API_URL}/api/usuarios/cambiar-contrasena`, {
       nuevaContrasena: this.nueva
     }, { headers }).subscribe({
       next: () => {
@@ -197,7 +193,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   loadProducts() {
-    this.http.get<any>('http://localhost:8080/api/productos/mas-pedidos').subscribe(data => {
+    this.http.get<any>(`${API_URL}/api/productos/mas-pedidos`).subscribe(data => {
       const productos = data.productos || [];
       this.productChartData.labels = productos.map((p: any) => p.nombre);
       this.productChartData.datasets[0].data = productos.map((p: any) => p.cantidad);

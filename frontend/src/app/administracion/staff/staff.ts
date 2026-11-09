@@ -7,6 +7,8 @@ import { AbstractControl, FormBuilder, FormGroup, FormsModule, Validators } from
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { API_URL } from '../../config/api.config';
+import { ADMIN_MENU_ITEMS } from '../menu.config';
 
 interface Empleado {
   nombre: string;
@@ -53,17 +55,11 @@ export class StaffComponent implements OnInit {
   confirmar = '';
   confirmarAccion = false;
 
-  private apiUrl_logout = 'http://localhost:8080/api/usuarios';
+  private apiUrl_logout = `${API_URL}/api/usuarios`;
 
   @Output() cambioExitoso = new EventEmitter<void>();
 
-  menuItems = [
-    { name: 'Panel', icon: 'bi bi-grid', route: '/panel' },
-    { name: 'Empleados', icon: 'bi bi-pencil-square', route: '/empleados' },
-    { name: 'Chat', icon: 'bi bi-chat-dots', route: '/chat-atencion' },
-    //{ name: 'Pagos', icon: 'bi bi-currency-dollar', route: '/pagos' },
-    { name: 'Dashboard', icon: 'bi bi-bar-chart', route: '/dashboard' },
-  ];
+  menuItems = [...ADMIN_MENU_ITEMS];
 
   abrircambio() {
     this.visible = true;
@@ -99,7 +95,7 @@ export class StaffComponent implements OnInit {
 
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    this.http.put('http://localhost:8080/api/usuarios/cambiar-contrasena', {
+    this.http.put(`${API_URL}/api/usuarios/cambiar-contrasena`, {
       nuevaContrasena: this.nueva
     }, { headers }).subscribe({
       next: () => {
@@ -151,7 +147,7 @@ export class StaffComponent implements OnInit {
       const ahora = Date.now();
       if (ahora - this.ultimoPing < 60000) {
         this.http.put(
-          'http://localhost:8080/api/usuarios/keep-alive', 
+          `${API_URL}/api/usuarios/keep-alive`, 
           {}, 
           { headers: { 'Authorization': `Bearer ${this.usuario.token}` } }
         ).subscribe({
@@ -173,7 +169,7 @@ export class StaffComponent implements OnInit {
     const token = this.usuario.token;
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    this.http.get<any>(`http://localhost:8080/api/usuarios/empleados?page=${page}&size=9`, { headers })
+    this.http.get<any>(`${API_URL}/api/usuarios/empleados?page=${page}&size=9`, { headers })
       .subscribe({
         next: resp => {
           this.empleados = resp.content;
@@ -196,7 +192,7 @@ export class StaffComponent implements OnInit {
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${this.usuario.token}` });
 
     this.http.get<any>(
-      `http://localhost:8080/api/empleados/buscar?filtro=${termino}&page=0&size=9`,
+      `${API_URL}/api/empleados/buscar?filtro=${termino}&page=0&size=9`,
       { headers }
     ).subscribe(resp => {
       this.empleados = resp.content;
@@ -237,7 +233,7 @@ export class StaffComponent implements OnInit {
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
     this.http.post(
-      `http://localhost:8080/api/usuarios/verificar-contrasena`,
+      `${API_URL}/api/usuarios/verificar-contrasena`,
       { password: this.passwordConfirmacion },
       { headers }
     ).subscribe({
@@ -254,7 +250,7 @@ export class StaffComponent implements OnInit {
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
     this.http.post(
-      `http://localhost:8080/api/empleados/crear`,
+      `${API_URL}/api/empleados/crear`,
       this.empleadoPendiente,
       { headers }
     ).subscribe({

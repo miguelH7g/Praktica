@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { API_URL } from '../../config/api.config';
 
 @Component({
   selector: 'app-solicitar',
@@ -17,7 +18,7 @@ export class SolicitarComponent implements OnInit {
   usuario: any = null;
   menuAbierto = false;
   userMenuAbierto = false;
-  private apiUrl_logout = 'http://localhost:8080/api/usuarios';
+  private apiUrl_logout = `${API_URL}/api/usuarios`;
 
   menuItems = [
     { name: 'Catálogo', icon: 'bi bi-grid', route: '/index' },
@@ -71,7 +72,7 @@ export class SolicitarComponent implements OnInit {
       const ahora = Date.now();
       if (ahora - this.ultimoPing < 60000) {
         this.http.put(
-          'http://localhost:8080/api/usuarios/keep-alive', 
+          `${API_URL}/api/usuarios/keep-alive`, 
           {}, 
           { headers: { 'Authorization': `Bearer ${this.usuario.token}` } }
         ).subscribe({
@@ -90,7 +91,7 @@ export class SolicitarComponent implements OnInit {
   }
 
   cargarProductos() {
-    this.http.get('http://localhost:8080/api/productos').subscribe({
+    this.http.get(`${API_URL}/api/productos`).subscribe({
       next: (data: any) => {
         this.productos = [
           ...data.servicios.map((s: any) => ({
@@ -158,7 +159,7 @@ export class SolicitarComponent implements OnInit {
 
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    this.http.put('http://localhost:8080/api/usuarios/cambiar-contrasena', {
+    this.http.put(`${API_URL}/api/usuarios/cambiar-contrasena`, {
       nuevaContrasena: this.nueva
     }, { headers }).subscribe({
       next: () => {
@@ -213,7 +214,7 @@ export class SolicitarComponent implements OnInit {
 
     const token = this.usuario.token;
 
-    this.http.post('http://localhost:8080/api/ordenes', solicitud, {
+    this.http.post(`${API_URL}/api/ordenes`, solicitud, {
       headers: { 'Authorization': `Bearer ${this.usuario.token}` }
     }).subscribe({
       next: (data) => {
