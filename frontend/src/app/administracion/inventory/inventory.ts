@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { API_URL } from '../../config/api.config';
+import { INVENTORY_MENU_ITEMS } from '../menu.config';
 
 @Component({
   selector: 'app-inventory',
@@ -26,14 +27,7 @@ export class InventoryComponent {
   private apiProductos = `${API_URL}/api/productos`;
   private apiUrl_logout = `${API_URL}/api/usuarios`;
 
-  menuItems = [
-    { name: 'Panel', icon: 'bi bi-grid', route: '/panel' },
-    { name: 'Empleados', icon: 'bi bi-pencil-square', route: '/empleados' },
-    { name: 'Chat', icon: 'bi bi-chat-dots', route: '/chat-atencion' },
-    //{ name: 'Pagos', icon: 'bi bi-currency-dollar', route: '/pagos' },
-    { name: 'Inventario', icon: 'bi bi-list-check', route: '/inventario' },
-    { name: 'Dashboard', icon: 'bi bi-bar-chart', route: '/dashboard' },
-  ];
+  menuItems = [...INVENTORY_MENU_ITEMS];
 
   formEditar = {
     nombre: "",

@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { API_URL } from '../../config/api.config';
+import { ADMIN_MENU_ITEMS } from '../menu.config';
 
 @Component({
   selector: 'app-payments',
@@ -38,13 +39,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   @Input() chatSeleccionado: any = null;
   @Input() mensajes: any[] = [];
 
-  menuItems = [
-    { name: 'Panel', icon: 'bi bi-grid', route: '/panel' },
-    { name: 'Empleados', icon: 'bi bi-pencil-square', route: '/empleados' },
-    { name: 'Chat', icon: 'bi bi-chat-dots', route: '/chat-atencion' },
-    //{ name: 'Pagos', icon: 'bi bi-currency-dollar', route: '/pagos' },
-    { name: 'Dashboard', icon: 'bi bi-bar-chart', route: '/dashboard' },
-  ];
+  menuItems = [...ADMIN_MENU_ITEMS];
 
   optionsMenuAbierto = false;
 

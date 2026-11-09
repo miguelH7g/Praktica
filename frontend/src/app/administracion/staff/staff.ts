@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { API_URL } from '../../config/api.config';
+import { ADMIN_MENU_ITEMS } from '../menu.config';
 
 interface Empleado {
   nombre: string;
@@ -58,13 +59,7 @@ export class StaffComponent implements OnInit {
 
   @Output() cambioExitoso = new EventEmitter<void>();
 
-  menuItems = [
-    { name: 'Panel', icon: 'bi bi-grid', route: '/panel' },
-    { name: 'Empleados', icon: 'bi bi-pencil-square', route: '/empleados' },
-    { name: 'Chat', icon: 'bi bi-chat-dots', route: '/chat-atencion' },
-    //{ name: 'Pagos', icon: 'bi bi-currency-dollar', route: '/pagos' },
-    { name: 'Dashboard', icon: 'bi bi-bar-chart', route: '/dashboard' },
-  ];
+  menuItems = [...ADMIN_MENU_ITEMS];
 
   abrircambio() {
     this.visible = true;
