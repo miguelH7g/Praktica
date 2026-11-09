@@ -3,6 +3,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { API_URL } from '../../config/api.config';
 
 @Component({
   selector: 'app-register',
@@ -47,7 +48,7 @@ export class RegisterComponent {
       contrasena: this.user.contrasena
     };
 
-    this.http.post('http://localhost:8080/api/usuarios/registro', body, { withCredentials: true })
+    this.http.post(`${API_URL}/api/usuarios/registro`, body, { withCredentials: true })
     .subscribe({
       next: (usuario: any) => {
         alert('Usuario registrado correctamente');

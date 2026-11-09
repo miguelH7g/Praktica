@@ -8,6 +8,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { BaseChartDirective, NgChartsModule } from 'ng2-charts';
+import { API_URL } from '../../config/api.config';
+import { ADMIN_MENU_ITEMS } from '../menu.config';
 
 @Component({
   selector: 'app-panel',
@@ -49,11 +51,11 @@ export class PanelComponent implements OnInit, AfterViewInit {
   @ViewChild('ventasChart') ventasChart?: BaseChartDirective;
   @ViewChild('productosChart') productosChart?: BaseChartDirective;
 
-  private apiUrlEmpleados = 'http://localhost:8080/api/empleados';
-  private apiUrlUsuarios = 'http://localhost:8080/api/usuarios';
-  private apiUrlChats = 'http://localhost:8080/api/chats';
-  private apiUrl_logout = 'http://localhost:8080/api/usuarios';
-  private apiUrl_pagos = 'http://localhost:8080/api/pagos';
+  private apiUrlEmpleados = `${API_URL}/api/empleados`;
+  private apiUrlUsuarios = `${API_URL}/api/usuarios`;
+  private apiUrlChats = `${API_URL}/api/chats`;
+  private apiUrl_logout = `${API_URL}/api/usuarios`;
+  private apiUrl_pagos = `${API_URL}/api/pagos`;
 
   empleado = {
     nombre: '',
@@ -99,7 +101,7 @@ export class PanelComponent implements OnInit, AfterViewInit {
 
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    this.http.put('http://localhost:8080/api/usuarios/cambiar-contrasena', {
+    this.http.put(`${API_URL}/api/usuarios/cambiar-contrasena`, {
       nuevaContrasena: this.nueva
     }, { headers }).subscribe({
       next: () => {
@@ -122,13 +124,7 @@ export class PanelComponent implements OnInit, AfterViewInit {
     comprobante_url: null
   };
 
-  menuItems = [
-    { name: 'Panel', icon: 'bi bi-grid', route: '/panel' },
-    { name: 'Empleados', icon: 'bi bi-pencil-square', route: '/empleados' },
-    { name: 'Chat', icon: 'bi bi-chat-dots', route: '/chat-atencion' },
-    //{ name: 'Pagos', icon: 'bi bi-currency-dollar', route: '/pagos' },
-    { name: 'Dashboard', icon: 'bi bi-bar-chart', route: '/dashboard' },
-  ];
+  menuItems = [...ADMIN_MENU_ITEMS];
 
   public ventasChartData: ChartConfiguration<'bar'>['data'] = {
     labels: [],
@@ -196,7 +192,7 @@ export class PanelComponent implements OnInit, AfterViewInit {
       const ahora = Date.now();
       if (ahora - this.ultimoPing < 60000) {
         this.http.put(
-          'http://localhost:8080/api/usuarios/keep-alive', 
+          `${API_URL}/api/usuarios/keep-alive`, 
           {}, 
           { headers: { 'Authorization': `Bearer ${this.usuario.token}` } }
         ).subscribe({
@@ -309,7 +305,7 @@ export class PanelComponent implements OnInit, AfterViewInit {
     const token = this.usuario.token;
 
     this.http.get<{ nombre: string, cantidad: number }[]>(
-      `http://localhost:8080/api/productos/mas-vendidos`,
+      `${API_URL}/api/productos/mas-vendidos`,
       { headers: { Authorization: `Bearer ${token}` }}
     ).subscribe({
       next: res => {
@@ -329,7 +325,7 @@ export class PanelComponent implements OnInit, AfterViewInit {
     const token = this.usuario?.token;
 
     this.http.post(
-      `http://localhost:8080/api/usuarios/verificar-contrasena`,
+      `${API_URL}/api/usuarios/verificar-contrasena`,
       { password: this.passwordPanel },
       { headers: { Authorization: `Bearer ${token}` }}
     ).subscribe({
@@ -352,7 +348,7 @@ export class PanelComponent implements OnInit, AfterViewInit {
     this.errorPassword = '';
 
     this.http.post(
-      `http://localhost:8080/api/usuarios/verificar-contrasena`,
+      `${API_URL}/api/usuarios/verificar-contrasena`,
       { password: this.passwordValidacion },
       { headers: { Authorization: `Bearer ${token}` }}
     ).subscribe({
@@ -373,7 +369,7 @@ export class PanelComponent implements OnInit, AfterViewInit {
         };
 
         this.http.post(
-          `http://localhost:8080/api/empleados/crear`,
+          `${API_URL}/api/empleados/crear`,
           payload,
           { headers: { Authorization: `Bearer ${token}` }}
         ).subscribe({

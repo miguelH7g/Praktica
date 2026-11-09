@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { API_URL } from '../../config/api.config';
 
 @Component({
   selector: 'app-myorders',
@@ -23,7 +24,7 @@ export class MisSolicitudesComponent implements OnInit {
   modalConfirmarAbierto = false;
   ultimoPing: number = 0;
   intervaloKeepAlive: any;
-  private apiUrl_logout = 'http://localhost:8080/api/usuarios';
+  private apiUrl_logout = `${API_URL}/api/usuarios`;
   ordenSeleccionada: any = null;
   ordenEdit: any = {};
   ordenes: any[] = [];
@@ -62,7 +63,7 @@ export class MisSolicitudesComponent implements OnInit {
       const ahora = Date.now();
       if (ahora - this.ultimoPing < 60000) {
         this.http.put(
-          'http://localhost:8080/api/usuarios/keep-alive', 
+          `${API_URL}/api/usuarios/keep-alive`, 
           {}, 
           { headers: { 'Authorization': `Bearer ${this.usuario.token}` } }
         ).subscribe({
@@ -145,7 +146,7 @@ export class MisSolicitudesComponent implements OnInit {
 
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    this.http.put('http://localhost:8080/api/usuarios/cambiar-contrasena', {
+    this.http.put(`${API_URL}/api/usuarios/cambiar-contrasena`, {
       nuevaContrasena: this.nueva
     }, { headers }).subscribe({
       next: () => {
@@ -174,7 +175,7 @@ export class MisSolicitudesComponent implements OnInit {
 
   cargarOrdenes(): void {
     const idUsuario = this.usuario?.id_usuario || this.usuario?.idUsuario;
-    this.http.get<any[]>(`http://localhost:8080/api/ordenes/usuario/${idUsuario}`).subscribe({
+    this.http.get<any[]>(`${API_URL}/api/ordenes/usuario/${idUsuario}`).subscribe({
       next: (data) => {
         this.ordenes = data.map(o => ({
           id_orden: o.idOrden ?? o.id_orden,
@@ -258,7 +259,7 @@ export class MisSolicitudesComponent implements OnInit {
     if (fechaEntrega) params.set('fechaEntregaEstimada', fechaEntrega);
     params.set('motivo', 'Edición manual de orden');
 
-    this.http.put(`http://localhost:8080/api/ordenes/${idOrden}/detalles?${params.toString()}`, {}).subscribe({
+    this.http.put(`${API_URL}/api/ordenes/${idOrden}/detalles?${params.toString()}`, {}).subscribe({
       next: () => this.cargarOrdenes(),
       error: (err) => console.error('Error al actualizar la orden:', err)
     });
@@ -276,7 +277,7 @@ export class MisSolicitudesComponent implements OnInit {
 
   confirmarCancelacion(): void {
     if (!this.ordenSeleccionada) return;
-    this.http.put(`http://localhost:8080/api/ordenes/${this.ordenSeleccionada.id_orden}/estado?estado=cancelado`, {}).subscribe({
+    this.http.put(`${API_URL}/api/ordenes/${this.ordenSeleccionada.id_orden}/estado?estado=cancelado`, {}).subscribe({
       next: () => {
         this.modalConfirmarAbierto = false;
         this.ordenSeleccionada = null;
