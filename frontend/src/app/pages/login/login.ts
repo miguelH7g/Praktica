@@ -4,6 +4,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthGoogleService } from '../../services/auth-google';
+import { API_URL } from '../../config/api.config';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,7 @@ export class LoginComponent {
   ) {}
 
   onLogin() {
-    this.http.post('http://localhost:8080/api/usuarios/login', this.credentials)
+    this.http.post(`${API_URL}/api/usuarios/login`, this.credentials)
       .subscribe({
         next: (response: any) => {
           localStorage.setItem('usuario', JSON.stringify({
@@ -76,7 +77,7 @@ export class LoginComponent {
       return;
     }
 
-    this.http.post('http://localhost:8080/api/usuarios/google', { idToken })
+    this.http.post(`${API_URL}/api/usuarios/google`, { idToken })
       .subscribe({
         next: (res: any) => {
           localStorage.setItem('usuario', JSON.stringify({
@@ -108,7 +109,7 @@ export class LoginComponent {
 
     const payload = { email: this.reset.email, nuevaContrasena: this.reset.newPassword };
 
-    this.http.put('http://localhost:8080/api/usuarios/recuperar-contrasena', payload)
+    this.http.put(`${API_URL}/api/usuarios/recuperar-contrasena`, payload)
       .subscribe({
         next: () => {
           alert('Contraseña cambiada correctamente.');

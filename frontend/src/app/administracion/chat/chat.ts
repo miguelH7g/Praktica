@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { ChatWebSocketService } from '../../services/chat-websocket';
+import { API_URL } from '../../config/api.config';
 
 @Component({
   selector: 'app-chat',
@@ -34,8 +35,8 @@ export class ChatAtencionComponent implements OnInit, OnDestroy {
   ultimoPing: number = 0;
   intervaloKeepAlive: any;
   private subMensajes: any;
-  private apiUrl = 'http://localhost:8080/api/chats';
-  private apiUrl_logout = 'http://localhost:8080/api/usuarios';
+  private apiUrl = `${API_URL}/api/chats`;
+  private apiUrl_logout = `${API_URL}/api/usuarios`;
 
   visible = false;
   actual = '';
@@ -87,7 +88,7 @@ export class ChatAtencionComponent implements OnInit, OnDestroy {
       const ahora = Date.now();
       if (ahora - this.ultimoPing < 60000) {
         this.http.put(
-          'http://localhost:8080/api/usuarios/keep-alive', 
+          `${API_URL}/api/usuarios/keep-alive`, 
           {}, 
           { headers: { 'Authorization': `Bearer ${this.usuario.token}` } }
         ).subscribe({
@@ -146,7 +147,7 @@ export class ChatAtencionComponent implements OnInit, OnDestroy {
 
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    this.http.put('http://localhost:8080/api/usuarios/cambiar-contrasena', {
+    this.http.put(`${API_URL}/api/usuarios/cambiar-contrasena`, {
       nuevaContrasena: this.nueva
     }, { headers }).subscribe({
       next: () => {
@@ -377,7 +378,7 @@ export class ChatAtencionComponent implements OnInit, OnDestroy {
     const idChat = this.chatSeleccionado.idChat;
     const token = this.usuario.token;
 
-    this.http.get(`http://localhost:8080/api/chats/${idChat}/inspeccion`, {
+    this.http.get(`${API_URL}/api/chats/${idChat}/inspeccion`, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${token}`)
     }).subscribe({
       next: (orden: any) => {
@@ -422,7 +423,7 @@ export class ChatAtencionComponent implements OnInit, OnDestroy {
     const token = this.usuario.token;
 
     this.http.put(
-      `http://localhost:8080/api/ordenes/${idOrden}/estado?estado=produciendo`,
+      `${API_URL}/api/ordenes/${idOrden}/estado?estado=produciendo`,
       {},
       { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) }
     ).subscribe({
@@ -450,7 +451,7 @@ export class ChatAtencionComponent implements OnInit, OnDestroy {
     }
 
     this.http.put(
-      `http://localhost:8080/api/ordenes/${this.ordenSeleccionada.idOrden}/estado?estado=${estado}`,
+      `${API_URL}/api/ordenes/${this.ordenSeleccionada.idOrden}/estado?estado=${estado}`,
       {},
       { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) }
     ).subscribe({

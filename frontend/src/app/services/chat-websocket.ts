@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Client, IMessage, StompSubscription } from '@stomp/stompjs';
 import SockJS from 'sockjs-client/dist/sockjs.js';
 import { BehaviorSubject } from 'rxjs';
+import { WS_URL } from '../config/api.config';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class ChatWebSocketService {
     }
 
     this.client = new Client({
-      webSocketFactory: () => new SockJS('http://localhost:8080/ws-chat'),
+      webSocketFactory: () => new SockJS(WS_URL),
       debug: (str) => console.log(str),
       reconnectDelay: 5000
     });

@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { API_URL } from '../../config/api.config';
 
 @Component({
   selector: 'app-inventory',
@@ -22,8 +23,8 @@ export class InventoryComponent {
   inventario: any[] = [];
   modalAbierto = false;
   itemEditando: any = null;
-  private apiProductos = 'http://localhost:8080/api/productos';
-  private apiUrl_logout = 'http://localhost:8080/api/usuarios';
+  private apiProductos = `${API_URL}/api/productos`;
+  private apiUrl_logout = `${API_URL}/api/usuarios`;
 
   menuItems = [
     { name: 'Panel', icon: 'bi bi-grid', route: '/panel' },
@@ -63,7 +64,7 @@ export class InventoryComponent {
       const ahora = Date.now();
       if (ahora - this.ultimoPing < 60000) {
         this.http.put(
-          'http://localhost:8080/api/usuarios/keep-alive', 
+          `${API_URL}/api/usuarios/keep-alive`, 
           {}, 
           { headers: { 'Authorization': `Bearer ${this.usuario.token}` } }
         ).subscribe({
@@ -122,7 +123,7 @@ export class InventoryComponent {
     const token = this.usuario?.token;
     if (!token) return;
 
-    this.http.get<any>('http://localhost:8080/api/productos/inventario/servicios', {
+    this.http.get<any>(`${API_URL}/api/productos/inventario/servicios`, {
       headers: { 'Authorization': `Bearer ${token}` }
     }).subscribe(res => {
       this.inventario = res.servicios || [];
@@ -133,7 +134,7 @@ export class InventoryComponent {
     const token = this.usuario?.token;
     if (!token) return;
 
-    this.http.get<any>('http://localhost:8080/api/productos/inventario/packs', {
+    this.http.get<any>(`${API_URL}/api/productos/inventario/packs`, {
       headers: { 'Authorization': `Bearer ${token}` }
     }).subscribe(res => {
       this.inventario = res.packs || [];

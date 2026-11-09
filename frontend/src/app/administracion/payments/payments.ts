@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { API_URL } from '../../config/api.config';
 
 @Component({
   selector: 'app-payments',
@@ -32,7 +33,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   nueva = '';
   confirmar = '';
   confirmarAccion = false;
-  private apiUrl_logout = 'http://localhost:8080/api/usuarios';
+  private apiUrl_logout = `${API_URL}/api/usuarios`;
   @Output() cambioExitoso = new EventEmitter<void>();
   @Input() chatSeleccionado: any = null;
   @Input() mensajes: any[] = [];
@@ -68,7 +69,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
       const ahora = Date.now();
       if (ahora - this.ultimoPing < 60000) {
         this.http.put(
-          'http://localhost:8080/api/usuarios/keep-alive', 
+          `${API_URL}/api/usuarios/keep-alive`, 
           {}, 
           { headers: { 'Authorization': `Bearer ${this.usuario.token}` } }
         ).subscribe({
@@ -151,7 +152,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
 
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    this.http.put('http://localhost:8080/api/usuarios/cambiar-contrasena', {
+    this.http.put(`${API_URL}/api/usuarios/cambiar-contrasena`, {
       nuevaContrasena: this.nueva
     }, { headers }).subscribe({
       next: () => {
@@ -211,7 +212,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
     const token = this.usuario.token;
 
     this.http.post<any>(
-      'http://localhost:8080/api/pagos/generar-link',
+      `${API_URL}/api/pagos/generar-link`,
       body,
       {
         headers: new HttpHeaders().set('Authorization', `Bearer ${token}`)
@@ -253,7 +254,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
     const token = this.usuario.token;
 
     this.http.post(
-      `http://localhost:8080/api/chats/enviar-link/${this.numeroOrden}`,
+      `${API_URL}/api/chats/enviar-link/${this.numeroOrden}`,
       mensajePago,
       { headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) }
     ).subscribe({
@@ -279,7 +280,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
 
     const token = this.usuario.token;
 
-    this.http.post(`http://localhost:8080/api/chats/${this.chatSeleccionado.idChat}/enviar`, mensaje, {
+    this.http.post(`${API_URL}/api/chats/${this.chatSeleccionado.idChat}/enviar`, mensaje, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${token}`)
     }).subscribe({
       next: () => console.log('Mensaje de link enviado al chat'),
